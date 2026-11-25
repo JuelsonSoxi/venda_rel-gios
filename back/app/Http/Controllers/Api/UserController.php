@@ -13,15 +13,18 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'nome' => 'required|string|max:100',
+            'email' => 'required|email|max:150|unique:users,email',
+            'telefone' => 'nullable|string|max:20',
             'password' => 'required|string|min:8',
         ]);
 
         $user = User::create([
-            'name' => $validated['name'],
+            'nome' => $validated['nome'],
             'email' => $validated['email'],
+            'telefone' => $validated['telefone'] ?? null,
             'password' => Hash::make($validated['password']),
+            'perfil' => 'cliente',
         ]);
 
         return response()->json([
@@ -30,4 +33,3 @@ class UserController extends Controller
         ], 201);
     }
 }
-
